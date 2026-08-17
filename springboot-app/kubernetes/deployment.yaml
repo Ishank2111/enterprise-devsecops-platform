@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: enterprise-app-deployment
+
+spec:
+
+  replicas: 2
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1 
+  selector:
+    matchLabels:
+      app: enterprise-app
+  template:
+    metadata:
+      labels:
+        app: enterprise-app
+        environment: dev
+    spec:
+      containers:
+        - name: enterprise-app
+          image: enterprise-app:v1
+          imagePullPolicy: IfNotPresent
+  
+
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"  
+          envFrom:
+            - configMapRef:
+                name: enterprise-app-configmap
+            - secretRef:
+                 name: enterprise-app-secret  
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5  
+
+
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5    
+                     
+          ports:
+            - containerPort: 8080
+
+          

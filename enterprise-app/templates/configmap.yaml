@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: enterprise-app-configmap
+
+data:
+  SPRING_PROFILES_ACTIVE: "{{ .Values.config.SPRING_PROFILES_ACTIVE }}"
+  SERVER_PORT: "{{ .Values.config.SERVER_PORT }}"
+  APP_NAME: "{{ .Values.config.APP_NAME }}"
