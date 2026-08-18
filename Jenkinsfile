@@ -1,6 +1,10 @@
 pipeline {
     agent any 
 
+    environment {
+        APP_NAME = "enterprise-app"
+        VERSION = "${BUILD_NUMBER}"
+    }
     stages {
         stage("checkout") {
             steps {
@@ -19,7 +23,15 @@ pipeline {
         stage("Test") {
             steps {
                 dir('springboot-app') {
-                     sh './mvnw clean test'
+                     sh './mvnw test'
+                }
+            }
+        }
+
+        stage("Docker Build") {
+            steps {
+                dir('springboot-app') {
+                     sh "docker build -t ${APP_NAME}:${VERSION} ."
                 }
             }
         }
