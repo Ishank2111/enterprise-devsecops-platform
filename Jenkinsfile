@@ -59,6 +59,15 @@ pipeline {
                   sh "docker push ${APP_NAME}:${VERSION}"
             }
         }
+        stage("Helm Deploy") {
+    steps {
+        sh '''
+            helm upgrade --install enterprise-app ./enterprise-app \
+            --set image.repository=${APP_NAME} \
+            --set image.tag=${VERSION}
+        '''
+    } 
+        }
     }
 }
 
