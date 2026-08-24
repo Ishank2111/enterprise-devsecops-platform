@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     environment {
-        APP_NAME = "enterprise-app"
+        APP_NAME = "tyishank/enterprise-app"
         VERSION = "${BUILD_NUMBER}"
     }
     stages {
@@ -51,6 +51,12 @@ pipeline {
                             --password-stdin
                     '''
                 }
+            }
+        }
+
+        stage("Docker Push") {
+            steps {
+                  sh "docker push ${APP_NAME}:${VERSION}"
             }
         }
     }
