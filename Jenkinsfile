@@ -1,6 +1,9 @@
 pipeline {
     agent any 
 
+    triggers {
+       cron('H/5 * * * *')
+    }
     environment {
         APP_NAME = "tyishank/enterprise-app"
         VERSION = "${BUILD_NUMBER}"
